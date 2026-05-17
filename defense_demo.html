@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serverless Edge RL V3</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #eef3f9;
+      --panel: rgba(255, 255, 255, 0.86);
+      --panel-strong: #ffffff;
+      --line: #d7e0ec;
+      --text: #0f172a;
+      --muted: #5b6475;
+      --accent: #1d4ed8;
+      --accent-soft: #e8f0ff;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 28%),
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.08), transparent 25%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 28px 24px 56px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main {
+      padding: 30px 30px 24px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-side {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 38px;
+      line-height: 1.18;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .lead {
+      max-width: 90%;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      border: 1px solid #c9d8ee;
+      background: #ffffff;
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .metric .value {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .metric .sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .grid-3,
+    .grid-2,
+    .grid-4 {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .card p,
+    .card li {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    ul {
+      margin: 12px 0 0 18px;
+      padding: 0;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .img-card {
+      padding: 16px;
+      background: var(--panel-strong);
+    }
+
+    .img-card img {
+      display: block;
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor: zoom-in;
+    }
+
+    .img-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .caption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .img-missing {
+      display: none;
+      border-radius: 14px;
+      border: 1px dashed #94a3b8;
+      background: #f8fafc;
+      color: #475569;
+      padding: 28px 18px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 220px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer {
+      margin-top: 30px;
+      padding: 18px 22px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .page-link {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.84);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      z-index: 999;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      position: relative;
+      width: min(94vw, 1320px);
+      max-height: 92vh;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 22px;
+      padding: 20px 20px 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      border: none;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .modal-close:hover,
+    .modal-nav:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    .modal-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .modal-nav {
+      border: none;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 24px;
+      flex: 0 0 auto;
+    }
+
+    .modal img {
+      max-width: 100%;
+      max-height: 78vh;
+      border-radius: 14px;
+      background: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .modal-caption {
+      color: #e5eefb;
+      font-size: 14px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side,
+      .grid-4,
+      .grid-3,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .lead {
+        max-width: 100%;
+      }
+
+      .hero-note {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .modal-stage {
+        gap: 10px;
+      }
+
+      .modal-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
+      }
+
+      .modal-panel {
+        width: 98vw;
+        padding: 16px 12px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-main">
+        <div>
+          <div class="eyebrow">Graduation Project Presentation</div>
+          <h1>Serverless Edge RL V3</h1>
+          <p class="lead">
+            面向边缘无服务器场景的智能请求调度系统。该系统以三态启动建模、层共享缓存机制与动态内存惩罚为核心，
+            通过强化学习方法优化时延、缓存命中率与资源压力之间的综合平衡。
+          </p>
+        </div>
+        <div class="hero-note">
+          <span>现场展示页入口：<span class="page-link">http://localhost:8000/defense_demo.html</span></span>
+          <div class="hero-actions">
+            <button class="action-btn" type="button" onclick="window.location.reload()">刷新页面</button>
+            <button class="action-btn" type="button" onclick="scrollToLive()">定位到现场结果</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="metric">
+          <div class="label">核心场景</div>
+          <div class="value">Edge + Serverless</div>
+          <div class="sub">请求调度、缓存复用与资源约束联合优化</div>
+        </div>
+        <div class="metric">
+          <div class="label">方法关键词</div>
+          <div class="value">PPO / V3</div>
+          <div class="sub">多输入观测、三态启动、动态 beta</div>
+        </div>
+        <div class="metric">
+          <div class="label">实验类型</div>
+          <div class="value">Comparison</div>
+          <div class="sub">PPO vs LRU / Greedy / Random</div>
+        </div>
+        <div class="metric">
+          <div class="label">验证方式</div>
+          <div class="value">Ablation</div>
+          <div class="sub">FullV3 / FixedBeta / NoLayerSharing</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Project Overview</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Research Objective</h3>
+          <ul>
+            <li>降低请求平均时延与尾部时延，提升系统服务稳定性。</li>
+            <li>利用层共享缓存与热/温/冷启动差异，增强边缘资源利用效率。</li>
+            <li>在内存压力与缓存命中率之间实现更合理的动态权衡。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Method Design</h3>
+          <ul>
+            <li>构建 `hot / warm / cold` 三态启动模型，显式刻画容器与镜像层复用行为。</li>
+            <li>在观测空间中引入 `layer_cache` 与 `memory_usage_ratio`，提升状态表达能力。</li>
+            <li>通过动态 `beta` 惩罚项抑制高内存压力下的无效调度与资源浪费。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Experimental Assets</h3>
+          <ul>
+            <li>最终对比实验、最终消融实验、单日轨迹图与聚合论文图已全部整理。</li>
+            <li>系统支持统一评估、批量对比、消融训练与论文图自动生成。</li>
+            <li>现场可运行轻量评估流程，展示从脚本执行到结果图生成的完整链路。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Final Experimental Results</h2>
+      <div class="grid-2">
+        <div class="card img-card">
+          <div class="img-title">Comparison Overview</div>
+          <img src="results/paper_figures/phase6_comparison_overview.png" alt="Comparison Overview" />
+          <p class="caption">集中展示平均时延、尾部差距、缓存命中率与无效比例，用于呈现 PPO 与启发式基线的整体对比结果。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Ablation Overview</div>
+          <img src="results/paper_figures/phase6_ablation_overview.png" alt="Ablation Overview" />
+          <p class="caption">展示 FullV3、FixedBeta 与 NoLayerSharing 三个版本在关键指标上的总体差异。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Comparison Tail Analysis</div>
+          <img src="results/paper_figures/phase6_comparison_tail_focus.png" alt="Comparison Tail Analysis" />
+          <p class="caption">面向尾部时延的专题视图，适合说明 P95、P99 与 tail gap 的变化趋势。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Ablation Tail Analysis</div>
+          <img src="results/paper_figures/phase6_ablation_tail_focus.png" alt="Ablation Tail Analysis" />
+          <p class="caption">强调层共享机制对长尾控制的重要性，突出 NoLayerSharing 的尾部退化现象。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Method Behavior Analysis</h2>
+      <div class="grid-2">
+        <div class="card img-card">
+          <div class="img-title">Startup State Composition</div>
+          <img src="results/paper_figures/phase6_comparison_startup_mix.png" alt="Startup State Composition" />
+          <p class="caption">用于说明各策略在热启动、温启动、冷启动与无效动作上的结构差异。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Cache Hit Rate vs Memory Pressure</div>
+          <img src="results/paper_figures/phase6_comparison_cache_memory_joint.png" alt="Cache Hit Rate vs Memory Pressure" />
+          <p class="caption">联合呈现缓存命中率、平均内存压力与尾部表现之间的关系。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="live-results">
+      <h2>Live Demonstration Output</h2>
+      <div class="grid-4">
+        <div class="card img-card">
+          <div class="img-title">Live Policy Summary</div>
+          <img src="results/demo_eval/plots/policy_summary.png" alt="Live Policy Summary" onerror="showMissing(this)" />
+          <div class="img-missing">现场结果尚未生成</div>
+          <p class="caption">现场轻量评估结束后，该区域将展示新的总览图。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Live Startup Composition</div>
+          <img src="results/demo_eval/plots/startup_mix.png" alt="Live Startup Composition" onerror="showMissing(this)" />
+          <div class="img-missing">现场结果尚未生成</div>
+          <p class="caption">用于现场展示各基线策略在启动状态上的行为组成。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Live Latency Trajectory</div>
+          <img src="results/demo_eval/plots/latency_trajectory.png" alt="Live Latency Trajectory" onerror="showMissing(this)" />
+          <div class="img-missing">现场结果尚未生成</div>
+          <p class="caption">反映请求序列推进过程中时延变化的动态趋势。</p>
+        </div>
+        <div class="card img-card">
+          <div class="img-title">Live Memory Pressure</div>
+          <img src="results/demo_eval/plots/memory_pressure_trajectory.png" alt="Live Memory Pressure" onerror="showMissing(this)" />
+          <div class="img-missing">现场结果尚未生成</div>
+          <p class="caption">现场展示内存压力演化情况，辅助说明调度策略差异。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      本页面仅作为答辩展示入口。完整实验数据、聚合图表与逐步评估记录均保存在项目 `results/` 目录中。
+      现场运行轻量评估后，请在浏览器中刷新本页以查看新输出结果。
+    </div>
+  </div>
+
+  <div class="modal" id="imageModal" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" type="button" aria-label="Close" onclick="closeModal()">×</button>
+      <div class="modal-stage">
+        <button class="modal-nav" type="button" aria-label="Previous" onclick="moveModal(-1)">‹</button>
+        <img id="modalImage" src="" alt="" />
+        <button class="modal-nav" type="button" aria-label="Next" onclick="moveModal(1)">›</button>
+      </div>
+      <div class="modal-caption" id="modalCaption"></div>
+    </div>
+  </div>
+
+  <script>
+    const galleryImages = Array.from(document.querySelectorAll(".img-card img"));
+    let currentImageIndex = 0;
+
+    galleryImages.forEach((img, index) => {
+      img.addEventListener("click", () => openModal(index));
+    });
+
+    function showMissing(img) {
+      img.style.display = "none";
+      const box = img.parentElement.querySelector(".img-missing");
+      if (box) {
+        box.style.display = "flex";
+      }
+    }
+
+    function scrollToLive() {
+      const section = document.getElementById("live-results");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function openModal(index) {
+      const img = galleryImages[index];
+      if (!img || img.style.display === "none") {
+        return;
+      }
+
+      currentImageIndex = index;
+      const modal = document.getElementById("imageModal");
+      const modalImage = document.getElementById("modalImage");
+      const modalCaption = document.getElementById("modalCaption");
+      modalImage.src = img.src;
+      modalImage.alt = img.alt;
+      modalCaption.textContent = img.alt;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("imageModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function moveModal(step) {
+      const visibleImages = galleryImages.filter((img) => img.style.display !== "none");
+      if (!visibleImages.length) {
+        return;
+      }
+
+      let nextIndex = currentImageIndex;
+      do {
+        nextIndex = (nextIndex + step + galleryImages.length) % galleryImages.length;
+      } while (galleryImages[nextIndex].style.display === "none" && nextIndex !== currentImageIndex);
+
+      openModal(nextIndex);
+    }
+
+    document.getElementById("imageModal").addEventListener("click", (event) => {
+      if (event.target.id === "imageModal") {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const modal = document.getElementById("imageModal");
+      if (!modal.classList.contains("open")) {
+        return;
+      }
+      if (event.key === "Escape") {
+        closeModal();
+      } else if (event.key === "ArrowRight") {
+        moveModal(1);
+      } else if (event.key === "ArrowLeft") {
+        moveModal(-1);
+      }
+    });
+  </script>
+</body>
+</html>

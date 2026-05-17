@@ -1,0 +1,39 @@
+# Keep the public repository lightweight before defense.
+# Raw data, full results, weights, and internal docs stay local by default.
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE / editor
+.vscode/
+.idea/
+.cursor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local data and experiment artifacts
+data/azure_functions_trace/
+results/
+
+# Internal docs / temporary exports
+TODO.md
+doc_extract_*.txt
+*.docx
+
+# Logs
+*.log
